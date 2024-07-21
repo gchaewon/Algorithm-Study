@@ -1,4 +1,4 @@
-#include <algorithm> // std::max 사용을 위해
+#include <algorithm>
 #include <iostream>
 #include <vector>
 
@@ -22,7 +22,6 @@ int main() {
         dp[i] = max(nums[i], dp[i - 1] + nums[i]);
         answer = max(answer, dp[i]);
     }
-
     cout << answer;
 
     return 0;
