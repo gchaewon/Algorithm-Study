@@ -1,100 +1,92 @@
-#include <iostream>
-#include <queue>
-#include <vector>
-
-#define X first;
-#define Y second;
-
+#include <bits/stdc++.h>
+#define X first
+#define Y second
 using namespace std;
 
+char v[1004][10004];
 int r, c;
-vector<vector<char>> map(1000, vector<char>(1000, ' '));
-vector<vector<int>> dist1(1000, vector<int>(1000, 1));
-vector<vector<int>> dist2(1000, vector<int>(1000, 1));
-vector<pair<int, int>> dir = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
-queue<pair<int, int>> q1; // 불, x, y 좌표 저장용
-queue<pair<int, int>> q2; // 지훈이,  x, y 좌표 저장용
 
-void bfs() {
-    // 불 이동 경로 및 시간 측정
-    while (!q1.empty()) {
-        int x = q1.front().X;
-        int y = q1.front().Y;
-        q1.pop();
+int visited1[1004][1004];
+int visited2[1004][1004];
+queue<pair<int, int>> q1; // 지훈 저장
+queue<pair<int, int>> q2; // 불 저장
 
-        for (auto d : dir) {
-            int nx = x + d.X;
-            int ny = y + d.Y;
+vector<pair<int, int>> dir = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
 
-            // 맵 범위 벗어난 이동 불가
-            if (nx < 0 || nx >= r || ny < 0 || ny >= c) {
-                continue;
-            }
-            // 벽이거나 불이 지나갔으면 이동 불가
-            if (map[nx][ny] == '#' || map[nx][ny] == 'F') {
-                continue;
-            }
-            dist1[nx][ny] = dist1[x][y] + 1;
-            map[nx][ny] = 'F'; // 방문처리
-            q1.push({nx, ny});
-        }
-    }
-
-    // 지훈이 이동
+void bfs_fire() {
     while (!q2.empty()) {
         int x = q2.front().X;
         int y = q2.front().Y;
         q2.pop();
 
         for (auto d : dir) {
-            int nx = x + d.X;
-            int ny = y + d.Y;
+            int dx = x + d.X;
+            int dy = y + d.Y;
 
-            // 범위를 벗어나는 경우 탈출
-            if (nx < 0 || nx >= r || ny < 0 || ny >= c) {
-                if (nx < 0) {
-                    cout << dist2[0][ny];
-                } else if (nx >= r) {
-                    cout << dist2[r - 1][ny];
-                } else if (ny < 0) {
-                    cout << dist2[nx][0];
-                } else {
-                    cout << dist2[nx][c - 1];
-                }
-                return;
-            }
-
-            // 방문한적 있거나, 벽이면 이동 불가
-            if (dist2[nx][ny] != 1 || map[nx][ny] == '#') {
+            if (dx < 0 || dx >= r || dy < 0 || dy >= c || visited2[dx][dy] ||
+                v[dx][dy] == '#') {
                 continue;
             }
-            // 불의 경로이고, 불보다 늦게 도착하면 이동 불가
-            if (map[nx][ny] == 'F' && dist1[nx][ny] <= dist2[x][y] + 1) {
-                continue;
-            }
-            dist2[nx][ny] = dist2[x][y] + 1;
-            q2.push({nx, ny});
+            visited2[dx][dy] = visited2[x][y] + 1;
+            q2.push({dx, dy});
         }
     }
-
-    cout << "IMPOSSIBLE";
-    return;
 }
+void bfs_jh() {
+    int ans = 1000000;
+    while (!q1.empty()) {
+        int x = q1.front().X;
+        int y = q1.front().Y;
+        q1.pop();
+
+        // 불보다 늦게 도착하는 경로는 제외
+        if (visited1[x][y] >= visited2[x][y] && visited2[x][y] != 0) {
+            continue;
+        }
+        // 가장자리 중 최단경로 구하기
+        if (x == 0 || x == r - 1 || y == 0 || y == c - 1) {
+            ans = min(ans, visited1[x][y]);
+        }
+        for (auto d : dir) {
+            int dx = x + d.X;
+            int dy = y + d.Y;
+
+            if (dx < 0 || dx >= r || dy < 0 || dy >= c || visited1[dx][dy] ||
+                v[dx][dy] != '.') {
+                continue;
+            }
+            visited1[dx][dy] = visited1[x][y] + 1;
+            q1.push({dx, dy});
+        }
+    }
+    if (ans == 1000000) {
+        cout << "IMPOSSIBLE";
+    } else {
+        cout << ans;
+    }
+    cout << "\n";
+}
+
 int main() {
     cin >> r >> c;
+
     for (int i = 0; i < r; i++) {
         for (int j = 0; j < c; j++) {
-            cin >> map[i][j];
-            if (map[i][j] == 'F') {
+            cin >> v[i][j];
+            if (v[i][j] == 'J') {
                 q1.push({i, j});
+                visited1[i][j] = 1;
             }
-            if (map[i][j] == 'J') {
+            // 시작점이 여러 곳인 bfs
+            if (v[i][j] == 'F') {
                 q2.push({i, j});
+                visited2[i][j] = 1;
             }
         }
     }
 
-    bfs();
+    bfs_fire();
+    bfs_jh();
 
     return 0;
 }
