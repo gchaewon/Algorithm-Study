@@ -1,4 +1,7 @@
 .vscode
 input.txt
 a.out
+.DS_store
 build
+tempCodeRunnerFile
+tempCodeRunnerFile.cpp
