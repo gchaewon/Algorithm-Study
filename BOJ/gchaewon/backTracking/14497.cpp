@@ -3,72 +3,63 @@
 #define Y second
 using namespace std;
 
-vector<pair<int, int>> dir = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
-
-int n, m;
-int start_x, start_y, end_x, end_y;
-int ans = 0;
-char c[304][304];
-
-bool is_valid = false;
-
-void bfs(int x, int y) {
-    queue<pair<int, int>> q;
-    int visited[304][304];
-    memset(visited, 0, sizeof(visited));
-
-    q.push({x, y});
-    visited[x][y] = 1;
-
-    while (!q.empty()) {
-        int x = q.front().X;
-        int y = q.front().Y;
-        q.pop();
-
-        for (auto d : dir) {
-            int dx = x + d.X;
-            int dy = y + d.Y;
-
-            if (dx < 0 || dx >= n || dy < 0 || dy >= m || visited[dx][dy]) {
-                continue;
-            }
-            if (c[dx][dy] == '#') {
-                is_valid = true;
-                return;
-            }
-
-            visited[dx][dy] = 1;
-
-            if (c[dx][dy] == '1') {
-                c[dx][dy] = '0';
-            } else if (c[dx][dy] == '0') {
-                q.push({dx, dy});
-            }
-        }
-    }
-}
 int main() {
+    int n, m;
+    int start_x, start_y, end_x, end_y;
+    int ans = 0;
+    int visited[304][304];
+    char c[304][304];
+    vector<pair<int, int>> dir = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
+
     cin >> n >> m;
     cin >> start_x >> start_y >> end_x >> end_y;
-    start_x -= 1;
-    start_y -= 1;
-    end_x -= 1;
-    end_y -= 1;
 
-    for (int i = 0; i < n; i++) {
-        string line;
-        cin >> line;
-        for (int j = 0; j < m; j++) {
-            c[i][j] = line[j];
+    for (int i = 1; i <= n; i++) {
+        for (int j = 1; j <= m; j++) {
+            cin >> c[i][j];
         }
     }
 
-    while (true) {
+    queue<pair<int, int>> q;
+    q.push({start_x, start_y});
+    visited[start_x][start_y] = 1;
+
+    // 범위 위치에 도달할 때까지 반복
+    while (c[end_x][end_y] == '#') {
         ans++;
-        bfs(start_x, start_y);
-        if (is_valid) {
-            break;
+        queue<pair<int, int>> next;
+
+        while (!q.empty()) {
+            int x = q.front().X;
+            int y = q.front().Y;
+            q.pop();
+
+            // 범인 위치 도달 시 중단
+            if (x == end_x && y == end_y) {
+                c[x][y] = '0';
+                break;
+            }
+
+            for (auto d : dir) {
+                int dx = x + d.X;
+                int dy = y + d.Y;
+
+                if (dx <= 0 || dx > n || dy <= 0 || dy > m || visited[dx][dy]) {
+                    continue;
+                }
+                visited[dx][dy] = 1;
+
+                // 0이 아닌 경우 (1, #) 다음에 방문할 큐에 저장
+                if (c[dx][dy] != '0') {
+                    c[dx][dy] = '0';
+                    next.push({dx, dy});
+                } else { // 0인 경우 지금 방문할 큐에 저장
+                    q.push({dx, dy});
+                }
+            }
         }
+        // q 다음걸로 갱신
+        q = next;
     }
 
     cout << ans;
