@@ -1,5 +1,5 @@
 // 2025.02.15 풀이
-// [누적합] 컬러볼
+// [구현_누적합] 컬러볼
 // https://www.acmicpc.net/problem/10800
 
 const fs = require("fs");
