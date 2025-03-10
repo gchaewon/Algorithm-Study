@@ -1,5 +1,5 @@
 // 2025.02.17 풀이
-// [분할정복_재귀] 쿼드트리
+// [재귀_분할정복] 쿼드트리
 // https://www.acmicpc.net/problem/1992
 
 const fs = require("fs");
