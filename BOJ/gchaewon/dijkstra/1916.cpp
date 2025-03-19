@@ -11,7 +11,7 @@ vector<int> dist(1004, INT_MAX);
 vector<pair<int, int>> bus[1004];
 
 void dijkstra() {
-    priority_queue<pair<int, int>>
+    priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>>
         pq; // {누적 비용, 도시 번호}, 비용 순 오름차순
 
     dist[start] = 0;
