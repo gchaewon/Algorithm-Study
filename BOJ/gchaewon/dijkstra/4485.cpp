@@ -1,3 +1,5 @@
+#include <algorithm>
+#include <climits>
 #include <cstring>
 #include <iostream>
 #include <queue>
@@ -9,6 +11,7 @@ using namespace std;
 
 int n;
 int a[129][129], dist[129][129];
+
 vector<pair<int, int>> dir = {{1, 0}, {0, 1}, {-1, 0}, {0, -1}};
 
 void dijkstra() {
@@ -45,7 +48,8 @@ int main() {
         }
 
         memset(a, 0, sizeof(a));
-        memset(dist, 10, sizeof(dist)); // 최댓값으로 초기화
+        fill(&dist[0][0], &dist[0][0] + 129 * 129, INT_MAX);
+
         for (int i = 0; i < n; i++) {
             for (int j = 0; j < n; j++) {
                 cin >> a[i][j];
