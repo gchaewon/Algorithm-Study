@@ -1,5 +1,5 @@
 // 2025.02.18 풀이
-// [DFS_BFS] 연구소
+// [DFS_BFS_백트래킹] 연구소
 // https://www.acmicpc.net/problem/14502
 
 const fs = require("fs");
