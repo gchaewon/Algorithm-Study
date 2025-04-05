@@ -76,13 +76,16 @@ void move() {
     for (int i = 0; i < n; i++) {
         for (int j = 0; j < n; j++) {
             int cnt = a[i][j].size();
+            // 공이 없는 위치 넘어김
             if (cnt == 0) {
                 continue;
             }
+            // 공이 1개인 경우 병합 X
             if (cnt == 1) {
                 newBalls.push_back(a[i][j][0]);
                 continue;
             }
+            // 공 2개 이상이면 병합
             combine(i, j, a[i][j], newBalls);
         }
     }
