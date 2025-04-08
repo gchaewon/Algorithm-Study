@@ -74,7 +74,6 @@ void loserMove(Player &player) {
         dy = y + dir[(player.d + i) % 4].Y;
 
         // 범위를 벗어나지 않고, 다른 플레이어가 없는 경우 이동 가능
-
         if (0 <= dx && dx < n && 0 <= dy && dy < n && pa[dx][dy] == 0) {
             player.d = (player.d + i) % 4; // 방향 업데이트
             player.x = dx;                 // 위치 업데이트
@@ -86,7 +85,6 @@ void loserMove(Player &player) {
 
     // 이동 가능한 칸이 있는 경우
     if (flag) {
-        pa[dx][dy] = 0;          // 이전 위치 지우기
         pa[dx][dy] = player.num; // 새 위치 확정
 
         // 이동한 칸에 총이 있다면, 가장 공격력 높은 총 획득
