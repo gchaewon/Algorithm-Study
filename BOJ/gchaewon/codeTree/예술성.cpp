@@ -133,13 +133,26 @@ void getScore() {
 }
 
 // 작은 사각형 90도 회전 함수
-void turnRect(int sx, int sy, int ex, int ey) {
-    int len = ex - sx + 1; // 사각형 한 변 길이
+void turnRect(pair<int, int> start, pair<int, int> end) {
+    while (start.X < end.X && start.Y < end.Y) { // 직사각형 만족할 때까지 반복
+        int len = end.X - start.X + 1; // 직사각형 한 변 길이
 
-    for (int i = 0; i < len; i++) {
-        for (int j = 0; j < len; j++) {
-            a[sx + j][sy + len - 1 - i] = temp[sx + i][sy + j];
+        // 로테이트 구현
+        for (int i = 0; i < len; i++) {
+            for (int j = 0; j < len; j++) {
+                int origin_x = start.X + i;
+                int origin_y = start.Y + j;
+
+                int roate_x = start.X + j;              // x+ 원본 y 이동
+                int rotate_y = start.Y + (len - 1) - i; // y+ 원본 x 이동만큼
+
+                a[roate_x][rotate_y] = temp[origin_x][origin_y];
+            }
         }
+
+        // 각 꼭짓점 축소
+        start = {start.X + 1, start.Y + 1};
+        end = {end.X - 1, end.Y - 1};
     }
 }
 
@@ -163,12 +176,11 @@ void turnSimulator() {
     // 4개 네모 회전
     // 1 2
     // 3 4
-    turnRect(0, 0, h - 1, h - 1);
-    turnRect(0, h + 1, h - 1, n - 1);
-    turnRect(h + 1, 0, n - 1, h - 1);
-    turnRect(h + 1, h + 1, n - 1, n - 1);
+    turnRect({0, 0}, {h - 1, h - 1});
+    turnRect({0, h + 1}, {h - 1, n - 1});
+    turnRect({h + 1, 0}, {n - 1, h - 1});
+    turnRect({h + 1, h + 1}, {n - 1, n - 1});
 }
-
 int main() {
     cin >> n;
     for (int i = 0; i < n; i++) {
