@@ -1,37 +1,34 @@
 #include <iostream>
 #include <map>
 #include <set>
-
 using namespace std;
 
 int main() {
-    int N, M, option;
-    map<string, set<string>> m;
-    map<string, string> members;
-    string team, name;
-    cin >> N >> M;
+    int n, m, num, option;
+    string team, member, quiz;
+    cin >> n >> m;
 
-    while (N--) {
-        int num;
+    map<string, set<string>> groups;
+    map<string, string> members;
+
+    while (n--) {
         cin >> team >> num;
-        m.insert({team, {}});
-        while (num--) {
-            cin >> name;
-            m[team].insert(name);
-            members.insert({name, team});
+        for (int i = 0; i < num; i++) {
+            cin >> member;
+            groups[team].insert(member);
+            members[member] = team;
         }
     }
-
-    while (M--) {
-        cin >> name >> option;
+    while (m--) {
+        cin >> quiz >> option;
         if (option) {
-            string team = members[name];
-            cout << team << "\n";
+            cout << members[quiz] << "\n";
         } else {
-            for (auto t : m[name]) {
-                cout << t << "\n";
+            for (auto g : groups[quiz]) {
+                cout << g << "\n";
             }
         }
     }
+
     return 0;
 }
