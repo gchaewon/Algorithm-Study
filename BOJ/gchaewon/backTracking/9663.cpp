@@ -1,37 +1,50 @@
-#include <cmath>
+#include <algorithm>
 #include <iostream>
 using namespace std;
 
-int n;
-int arr[16]; // 각 행(x)에서 퀸을 놓은 열(y) 저장
-int answer = 0;
+int n, ans = 0;
+// queen[x] = y 각 x행에 놓은 퀸 y열 저장
+int queen[19] = {
+    -1,
+};
 
-bool isSafe(int x, int y) {
-    for (int i = 0; i < x; i++) { // x-1 행까지 퀸을 놓은 위치를 순회하며 확인
-        // 같은 열이나 대각선인 경우 false
-        if (arr[i] == y || abs(i - x) == abs(arr[i] - y)) {
+bool check(int dx, int dy) {
+    for (int x = 0; x < dx; x++) {
+        // 열이 같거나, 대각선이라면(각 x, y 위치차가 1으로 같음) 퀸 못 놓음
+        if (queen[x] == dy || (abs(dx - x) == abs(dy - queen[x]))) {
             return false;
         }
     }
     return true;
 }
 
-void nQueen(int x) {
-    if (x == n) { // 마지막 행까지 도착
-        answer++;
+void backTracking(int x) {
+    // n-1행까지 반복
+    if (x == n) {
+        ans++;
         return;
     }
+
+    // x행에서 가능한 y열 찾기
     for (int y = 0; y < n; y++) {
-        if (isSafe(x, y)) {
-            arr[x] = y;
-            nQueen(x + 1); // 다음 행 호출
+        if (check(x, y)) {
+            // 값 저장
+            queen[x] = y;
+            // 탐색
+            backTracking(x + 1);
+            // 원복
+            queen[x] = -1;
         }
     }
 }
 
 int main() {
     cin >> n;
-    nQueen(0); // 0번째 행부터 시작
-    cout << answer;
+
+    // 0번 행부터 시작
+    backTracking(0);
+
+    cout << ans;
+
     return 0;
 }
