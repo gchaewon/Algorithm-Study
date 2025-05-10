@@ -24,9 +24,10 @@ int main() {
 
         long long temp = 0; // 잘린 나무의 합
         for (int i = n - 1; i >= 0; i--) {
-            if (t[i] > mid) {
-                temp += t[i] - mid;
+            if (t[i] <= mid) {
+                break;
             }
+            temp += t[i] - mid;
         }
         // 잘린 나무가 부족하다면, 더 낮은 위치에서 자름
         if (temp < m) {
