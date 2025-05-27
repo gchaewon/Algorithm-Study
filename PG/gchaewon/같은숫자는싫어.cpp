@@ -19,7 +19,7 @@ vector<int> solution(vector<int> arr) {
         s.push(arr[i]);
     }
 
-    // 원래 순서대로 출력하기 위해 뒤집음
+    // 원래 순서대로 출력하기 위해 뒤집기
     while (!s.empty()) {
         answer.push_back(s.top());
         s.pop();
