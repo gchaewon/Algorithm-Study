@@ -1,27 +1,26 @@
-#include <bits/stdc++.h>
-
+#include <iostream>
+#include <vector>
 using namespace std;
 
-int n;
-int health[24], joy[24], dp[101]; // dp[n] = 체력 n일 때 최대 joy
-
 int main() {
-    cin >> n;
-    for (int i = 0; i < n; i++) {
-        cin >> health[i];
-    }
-    for (int i = 0; i < n; i++) {
-        cin >> joy[i];
-    }
+    int x;
+    cin >> x;
+    vector<int> dp(x + 1, 0);
 
-    for (int i = 0; i < n; i++) {
-        // 체력이 0 이상일 때까지만 반복
-        for (int j = 100; j > health[i]; j--) {
-            // 악수하지 않는 경우, 하는 경우
-            dp[j] = max(dp[j], dp[j - health[i]] + joy[i]);
+    dp[1] = 0;
+    dp[2] = 1;
+    dp[3] = 1;
+
+    for (int i = 4; i <= x; i++) {
+        dp[i] = dp[i - 1] + 1;
+        if (i % 3 == 0) {
+            dp[i] = min(dp[i], dp[i / 3] + 1);
+        }
+        if (i % 2 == 0) {
+            dp[i] = min(dp[i], dp[i / 2] + 1);
         }
     }
-    cout << dp[100];
 
+    cout << dp[x];
     return 0;
 }
