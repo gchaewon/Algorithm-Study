@@ -6,48 +6,29 @@ using namespace std;
 int main() {
     int n;
     cin >> n;
-    vector<int> v(n + 1, 0);
-    vector<vector<int>> dp(n + 1, vector<int>{0, 0, 0});
+    vector<long long> dp(n + 1, 0); // n번째 계단을 포함한 최댓값
+    vector<int> stairs(n + 1, 0);
 
     for (int i = 1; i <= n; i++) {
-        cin >> v[i];
-    }
-    if (n == 1) {
-        cout << v[n];
-        return 0;
+        cin >> stairs[i];
     }
 
-    dp[1][1] = v[1];
-    dp[1][2] = 0;
-    dp[2][1] = v[2];
-    dp[2][2] = v[1] + v[2];
-
-    for (int i = 3; i <= n; i++) {
-        dp[i][1] = max(dp[i - 2][1], dp[i - 2][2]) + v[i];
-        dp[i][2] = dp[i - 1][1] + v[i];
+    // 초깃값 예외 고려 처리
+    if (n >= 1) {
+        dp[1] = stairs[1];
+    }
+    if (n >= 2) {
+        dp[2] = stairs[1] + stairs[2];
+    }
+    if (n >= 3) {
+        dp[3] = max(stairs[1], stairs[2]) + stairs[3];
     }
 
-    cout << max(dp[n][1], dp[n][2]);
+    for (int i = 4; i <= n; i++) {
+        dp[i] = max(dp[i - 2], dp[i - 3] + stairs[i - 1]) + stairs[i];
+    }
+
+    cout << dp[n];
+
+    return 0;
 }
-// int main() {
-//     int n;
-//     cin >> n;
-//     vector<int> v(n + 1, 0);
-//     vector<int> dp(n + 1, 0);
-
-//     for (int i = 1; i <= n; i++) {
-//         cin >> v[i];
-//     }
-
-//     dp[0] = v[0];
-//     dp[1] = v[1];
-//     dp[2] = v[1] + v[2];
-//     dp[3] = max(v[1], v[2]) + v[3];
-
-//     for (int i = 4; i <= n; i++) {
-//         dp[i] = max(dp[i - 3] + v[i - 1], dp[i - 2]) + v[i];
-//     }
-//     cout << dp[n];
-
-//     return 0;
-// }
