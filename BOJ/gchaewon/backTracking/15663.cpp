@@ -2,48 +2,46 @@
 #include <iostream>
 #include <set>
 #include <vector>
-
 using namespace std;
 
-int main() {
-    int n, m;
-    cin >> n >> m;
-    vector<int> array(n, 0);
-    vector<int> sub_array(n, 1);
-    set<vector<int>> answer;
+int n, m;
+vector<int> nums, arr;
+set<vector<int>> arrs;
+int include[12];
 
-    for (int i = 0; i < m; i++) {
-        sub_array[i] = 0;
+void dfs(int cnt) {
+    if (cnt == m) {
+        arrs.insert(arr);
+        return;
     }
-
-    // 입력
     for (int i = 0; i < n; i++) {
-        cin >> array[i];
-    }
-    sort(array.begin(), array.end());
-
-    do {
-        // 숫자 뽑기
-        vector<int> combi;
-        for (int i = 0; i < n; i++) {
-            if (sub_array[i] == 0) {
-                combi.push_back(array[i]);
-            }
+        if (include[i]) {
+            continue;
         }
-        // 뽑은 숫자로 순열
-        do {
-            vector<int> seq;
-            for (int i = 0; i < combi.size(); i++) {
-                seq.push_back(combi[i]);
-            }
-            answer.insert(seq);
-        } while (next_permutation(combi.begin(), combi.end()));
-    } while (next_permutation(sub_array.begin(), sub_array.end()));
+        include[i] = 1;
+        arr.push_back(nums[i]);
 
-    // 출력
-    for (auto a : answer) {
-        for (int i = 0; i < a.size(); i++) {
-            cout << a[i] << " ";
+        dfs(cnt + 1);
+
+        include[i] = 0;
+        arr.pop_back();
+    }
+}
+int main() {
+    int num;
+    cin >> n >> m;
+
+    for (int i = 0; i < n; i++) {
+        cin >> num;
+        nums.push_back(num);
+    }
+    sort(nums.begin(), nums.end());
+
+    dfs(0);
+
+    for (vector<int> a : arrs) {
+        for (int i : a) {
+            cout << i << " ";
         }
         cout << "\n";
     }
