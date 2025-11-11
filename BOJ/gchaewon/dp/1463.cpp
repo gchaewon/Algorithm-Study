@@ -1,12 +1,11 @@
 #include <iostream>
 #include <vector>
-
 using namespace std;
 
 int main() {
     int n;
     cin >> n;
-    vector<int> dp(n + 1, 0);
+    vector<int> dp(n + 4, 0);
 
     dp[1] = 0;
 
@@ -19,6 +18,7 @@ int main() {
             dp[i] = min(dp[i], dp[i / 2] + 1);
         }
     }
+
     cout << dp[n];
     return 0;
 }
