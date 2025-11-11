@@ -1,28 +1,28 @@
-#include <algorithm>
 #include <iostream>
 #include <vector>
+
 using namespace std;
 
 int main() {
-    int n;
+    int n, answer = 0;
     cin >> n;
-    vector<vector<int>> dp(n, vector<int>(3, 0));
-    // dp[i][j] = i번째 집에서 j번째 색으로 칠했을 때 최소 비용
+    vector<vector<int>> arr(n + 4, vector<int>(3, 0));
+    vector<vector<long long>> dp(n + 4, vector<long long>(3, 0));
 
-    for (int i = 0; i < n; i++) {
+    for (int i = 1; i <= n; i++) {
         for (int j = 0; j < 3; j++) {
-            cin >> dp[i][j];
+            cin >> arr[i][j];
         }
     }
 
-    // 이전 집과 색 겹치지 않는 색 중 최솟값으로 더하기
-    for (int i = 1; i < n; i++) {
-        dp[i][0] += min(dp[i - 1][1], dp[i - 1][2]);
-        dp[i][1] += min(dp[i - 1][0], dp[i - 1][2]);
-        dp[i][2] += min(dp[i - 1][0], dp[i - 1][1]);
+    for (int i = 1; i <= n; i++) {
+        dp[i][0] = min(dp[i - 1][1], dp[i - 1][2]) + arr[i][0];
+        dp[i][1] = min(dp[i - 1][0], dp[i - 1][2]) + arr[i][1];
+        dp[i][2] = min(dp[i - 1][0], dp[i - 1][1]) + arr[i][2];
     }
 
-    sort(dp[n - 1].begin(), dp[n - 1].end());
-    cout << dp[n - 1][0];
+    answer = min(dp[n][0], min(dp[n][1], dp[n][2]));
+    cout << answer;
+
     return 0;
 }
